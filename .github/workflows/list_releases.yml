@@ -7,6 +7,7 @@ on:
 
 jobs:
   update-versions:
+    update-versions:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
@@ -14,23 +15,19 @@ jobs:
       - name: Get macOS Versions
         id: versions
         run: |
-          # Get versions and format as markdown table
           echo "VERSIONS_TABLE<<EOF" >> $GITHUB_ENV
           echo "| macOS Version | Build Number | Release Date |" >> $GITHUB_ENV
           echo "|--------------|--------------|--------------|" >> $GITHUB_ENV
           softwareupdate --list-full-installers | grep -E "macOS.*" | while read -r line; do
             version=$(echo "$line" | cut -d' ' -f2-)
-            echo "| $version | $(date +%Y-%m-%d) |" >> $GITHUB_ENV
+            echo "| $version | - | $(date +%Y-%m-%d) |" >> $GITHUB_ENV
           done
           echo "EOF" >> $GITHUB_ENV
 
       - name: Update README
         run: |
-          # Replace content between markers
-          sed -i '' '/<!-- BEGIN MACOS VERSIONS -->/,/<!-- END MACOS VERSIONS -->/c\
-          <!-- BEGIN MACOS VERSIONS -->\
-          ${{ env.VERSIONS_TABLE }}\
-          <!-- END MACOS VERSIONS -->' README.md
+          awk '/<!-- BEGIN MACOS VERSIONS -->/{p=1;print;print ENVIRON["VERSIONS_TABLE"]}!/<!-- BEGIN MACOS VERSIONS -->/{if(!p)print}/<!-- END MACOS VERSIONS -->/{p=0}' README.md > README.tmp
+          mv README.tmp README.md
 
       - name: Commit Changes
         run: |
