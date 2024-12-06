@@ -1,4 +1,5 @@
 name: List Available macOS Releases
+
 on:
   workflow_dispatch:
   schedule:
@@ -11,23 +12,35 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Get macOS Versions
+        id: versions
         run: |
-          # Create versions list
-          echo "VERSIONS<<EOF" >> $GITHUB_ENV
+          echo "VERSIONS_LIST<<EOF" >> $GITHUB_ENV
           echo "# Available macOS Versions" >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
-          softwareupdate --list-full-installers | grep -E "macOS.*" >> $GITHUB_ENV
+          softwareupdate --list-full-installers | grep -E "macOS.*" | while read -r line; do
+              name=$(echo "$line" | grep -o 'Title: macOS [^,]*' | cut -d' ' -f3)
+              version=$(echo "$line" | grep -o 'Version: [^,]*' | cut -d' ' -f2)
+              build=$(echo "$line" | grep -o 'Build: [^,]*' | cut -d' ' -f2)
+              size_kb=$(echo "$line" | grep -o 'Size: [0-9]*' | cut -d' ' -f2)
+              size_gb=$(echo "scale=2; $size_kb/1024/1024" | bc)
+              echo "* macOS $name $version ($build) - ${size_gb}GB"
+            echo "$line" >> $GITHUB_ENV
+          done
           echo "EOF" >> $GITHUB_ENV
 
       - name: Update README
         run: |
-          # Create new README with updated content
-          cat > README.tmp << EOL
-          $(cat README.md | sed -n '1,/<!-- BEGIN MACOS VERSIONS -->/p')
-          ${{ env.VERSIONS }}
-          $(cat README.md | sed -n '/<!-- END MACOS VERSIONS -->/,$p')
-          EOL
+          awk '/<!-- BEGIN MACOS VERSIONS -->/{p=1;print;print ENVIRON["VERSIONS_LIST"]}!/<!-- BEGIN MACOS VERSIONS -->/{if(!p)print}/<!-- END MACOS VERSIONS -->/{p=0}' README.md > README.tmp
           mv README.tmp README.md
+
+      - name: Commit Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "Update macOS versions list" || exit 0
+          git push
+
 
 
   
