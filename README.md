@@ -1,11 +1,4 @@
 <!-- BEGIN MACOS VERSIONS -->
-<details>
-<summary>🖥️ Available macOS Versions</summary>
-
-* macOS Sequoia, Version: 15.1.1, Build: 24B2091 (11.85GB)
-* macOS Sequoia, Version: 15.1, Build: 24B2083 (11.85GB)
-
-</details>
 <!-- END MACOS VERSIONS -->
 
 ###### macOS Downloader
