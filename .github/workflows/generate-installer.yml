@@ -83,31 +83,32 @@ jobs:
           zip -r 'Install macOS ${{ env.installer_name }}.zip' 'Install macOS ${{ env.installer_name }}.app'
           mv -v 'Install macOS ${{ env.installer_name }}.zip' ~/Desktop/'${{ env.installer_name }}.zip'
 
-      # Upload Installer
+      # Upload as workflow artifact
       - name: Upload ${{ github.event.inputs.file }}
         uses: actions/upload-artifact@v4
         with:
           name: macOS ${{ env.installer_name }}
           path: "~/Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}"
 
-  # Then create release and upload
-  - name: Create Release
-    id: create_release
-    uses: actions/create-release@v1
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    with:
-      tag_name: macOS-${{ env.installer_name }}-${{ github.run_number }}
-      release_name: macOS ${{ env.installer_name }}
-      draft: false
-      prerelease: false
+      # Create GitHub Release
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: macOS-${{ env.installer_name }}-${{ github.run_number }}
+          release_name: macOS ${{ env.installer_name }}
+          draft: false
+          prerelease: false
 
-  - name: Upload Release Asset
-    uses: actions/upload-release-asset@v1
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    with:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
-      asset_path: ~/Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}
-      asset_name: macOS-${{ env.installer_name }}.${{ github.event.inputs.file }}
-      asset_content_type: application/octet-stream     
+      # Upload asset to release
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ~/Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}
+          asset_name: macOS-${{ env.installer_name }}.${{ github.event.inputs.file }}
+          asset_content_type: application/octet-stream
