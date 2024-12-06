@@ -4,28 +4,17 @@ on:
   schedule:
     - cron: "0 0 * * 2"
     
-jobs:
   update-versions:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
       
-      - name: Initialize README if needed
-        run: |
-          if [ ! -f README.md ]; then
-            echo "# macOS Versions" > README.md
-            echo "" >> README.md
-            echo "<!-- BEGIN MACOS VERSIONS -->" >> README.md
-            echo "<!-- END MACOS VERSIONS -->" >> README.md
-          fi
-
       - name: Get macOS Versions
         run: |
-          {
-            echo "<!-- BEGIN MACOS VERSIONS -->"
-            echo "<details>"
-            echo "<summary>🖥️ Available macOS Versions</summary>"
-            echo ""
+          # Create versions list
+          echo "VERSIONS<<EOF" >> $GITHUB_ENV
+          echo "# Available macOS Versions" >> $GITHUB_ENV
+          echo "" >> $GITHUB_ENV
             softwareupdate --list-full-installers | grep -E "macOS.*" | while read -r line; do
               name=$(echo "$line" | grep -o 'Title: macOS [^,]*' | cut -d' ' -f3)
               version=$(echo "$line" | grep -o 'Version: [^,]*' | cut -d' ' -f2)
@@ -33,24 +22,20 @@ jobs:
               size_kb=$(echo "$line" | grep -o 'Size: [0-9]*' | cut -d' ' -f2)
               size_gb=$(echo "scale=2; $size_kb/1024/1024" | bc)
               echo "* macOS $name $version ($build) - ${size_gb}GB"
-            done
-            echo ""
-            echo "</details>"
-            echo "<!-- END MACOS VERSIONS -->"
-          } > versions.tmp
+            done >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Update README
         run: |
-          cp versions.tmp README.md
-          rm versions.tmp
+          # Create new README with updated content
+          cat > README.tmp << EOL
+          $(cat README.md | sed -n '1,/<!-- BEGIN MACOS VERSIONS -->/p')
+          ${{ env.VERSIONS }}
+          $(cat README.md | sed -n '/<!-- END MACOS VERSIONS -->/,$p')
+          EOL
+          mv README.tmp README.md
 
-      - name: Commit Changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add README.md
-          git commit -m "Update macOS versions list" || exit 0
-          git push
+  
 
          
 
