@@ -11,22 +11,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Get macOS Versions
-        id: versions
-        run: |
-          echo "VERSIONS_LIST<<EOF" >> $GITHUB_ENV
-          echo "# Available macOS Versions" >> $GITHUB_ENV
-          echo "" >> $GITHUB_ENV
-          softwareupdate --list-full-installers | grep -E "macOS.*" | while read -r line; do
-              name=$(echo "$line" | grep -o 'Title: macOS [^,]*' | cut -d' ' -f3)
-              version=$(echo "$line" | grep -o 'Version: [^,]*' | cut -d' ' -f2)
-              build=$(echo "$line" | grep -o 'Build: [^,]*' | cut -d' ' -f2)
-              size_kb=$(echo "$line" | grep -o 'Size: [0-9]*' | cut -d' ' -f2)
-              size_gb=$(echo "scale=2; $size_kb/1024/1024" | bc)
-              echo "* macOS $name $version ($build) - ${size_gb}GB"
-            echo "$line" >> $GITHUB_ENV
-          done
-          echo "EOF" >> $GITHUB_ENV
+     - name: Get macOS Versions
+  id: versions
+  run: |
+    {
+      echo "VERSIONS_LIST<<EOF"
+      echo "<details>"
+      echo "<summary>🖥️ Available macOS Versions</summary>"
+      echo ""
+      softwareupdate --list-full-installers | grep -E "macOS.*" | while read -r line; do
+        name=$(echo "$line" | grep -o 'Title: macOS [^,]*' | cut -d' ' -f3)
+        version=$(echo "$line" | grep -o 'Version: [^,]*' | cut -d' ' -f2)
+        build=$(echo "$line" | grep -o 'Build: [^,]*' | cut -d' ' -f2)
+        size_kb=$(echo "$line" | grep -o 'Size: [0-9]*' | cut -d' ' -f2)
+        size_gb=$(echo "scale=2; $size_kb/1024/1024" | bc)
+        echo "* macOS $name $version ($build) - ${size_gb}GB"
+      done
+      echo ""
+      echo "</details>"
+      echo "EOF"
+    } >> $GITHUB_ENV
 
       - name: Update README
         run: |
