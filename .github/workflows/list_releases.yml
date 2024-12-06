@@ -1,10 +1,9 @@
 name: List Available macOS Releases
-
 on:
   workflow_dispatch:
   schedule:
     - cron: "0 0 * * 2"
-
+    
 jobs:
   update-versions:
     runs-on: macos-latest
