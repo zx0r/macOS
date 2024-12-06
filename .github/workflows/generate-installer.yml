@@ -89,3 +89,25 @@ jobs:
         with:
           name: macOS ${{ env.installer_name }}
           path: "~/Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}"
+
+  # Then create release and upload
+  - name: Create Release
+    id: create_release
+    uses: actions/create-release@v1
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    with:
+      tag_name: macOS-${{ env.installer_name }}-${{ github.run_number }}
+      release_name: macOS ${{ env.installer_name }}
+      draft: false
+      prerelease: false
+
+  - name: Upload Release Asset
+    uses: actions/upload-release-asset@v1
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    with:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      asset_path: ~/Desktop/${{ env.installer_name }}.${{ github.event.inputs.file }}
+      asset_name: macOS-${{ env.installer_name }}.${{ github.event.inputs.file }}
+      asset_content_type: application/octet-stream     
