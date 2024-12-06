@@ -17,7 +17,8 @@ jobs:
           echo "VERSIONS<<EOF" >> $GITHUB_ENV
           echo "# Available macOS Versions" >> $GITHUB_ENV
           echo "" >> $GITHUB_ENV
-          softwareupdate --list-full-installers | grep -E "macOS.*" >> $GITHUB_ENV
+          # softwareupdate --list-full-installers | grep -E "macOS.*" >> $GITHUB_ENV
+          softwareupdate --list-full-installers | grep -E "macOS.*" | awk '{print $2" v"$3}' | jq -R -s -c 'split("\n")[:-1]') >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
       - name: Update README
