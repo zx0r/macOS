@@ -3,37 +3,58 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 0 * * 2"
-    
+
 jobs:
   update-versions:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
       
-     - name: Get macOS Versions
-  id: versions
-  run: |
-    {
-      echo "VERSIONS_LIST<<EOF"
-      echo "<details>"
-      echo "<summary>🖥️ Available macOS Versions</summary>"
-      echo ""
-      softwareupdate --list-full-installers | grep -E "macOS.*" | while read -r line; do
-        name=$(echo "$line" | grep -o 'Title: macOS [^,]*' | cut -d' ' -f3)
-        version=$(echo "$line" | grep -o 'Version: [^,]*' | cut -d' ' -f2)
-        build=$(echo "$line" | grep -o 'Build: [^,]*' | cut -d' ' -f2)
-        size_kb=$(echo "$line" | grep -o 'Size: [0-9]*' | cut -d' ' -f2)
-        size_gb=$(echo "scale=2; $size_kb/1024/1024" | bc)
-        echo "* macOS $name $version ($build) - ${size_gb}GB"
-      done
-      echo ""
-      echo "</details>"
-      echo "EOF"
-    } >> $GITHUB_ENV
+      - name: Initialize README
+        run: |
+          if [ ! -f README.md ]; then
+            echo "# macOS Versions" > README.md
+            echo "" >> README.md
+            echo "<!-- BEGIN MACOS VERSIONS -->" >> README.md
+            echo "<!-- END MACOS VERSIONS -->" >> README.md
+          fi
+
+      - name: Get macOS Versions
+        id: versions
+        run: |
+          {
+            echo "VERSIONS_LIST<<EOF"
+            echo "<details>"
+            echo "<summary>🖥️ Available macOS Versions</summary>"
+            echo ""
+            softwareupdate --list-full-installers | grep -E "macOS.*" | while read -r line; do
+              name=$(echo "$line" | grep -o 'Title: macOS [^,]*' | cut -d' ' -f3)
+              version=$(echo "$line" | grep -o 'Version: [^,]*' | cut -d' ' -f2)
+              build=$(echo "$line" | grep -o 'Build: [^,]*' | cut -d' ' -f2)
+              size_kb=$(echo "$line" | grep -o 'Size: [0-9]*' | cut -d' ' -f2)
+              size_gb=$(echo "scale=2; $size_kb/1024/1024" | bc)
+              echo "* macOS $name $version ($build) - ${size_gb}GB"
+            done
+            echo ""
+            echo "</details>"
+            echo "EOF"
+          } >> $GITHUB_ENV
 
       - name: Update README
         run: |
-          awk '/<!-- BEGIN MACOS VERSIONS -->/{p=1;print;print ENVIRON["VERSIONS_LIST"]}!/<!-- BEGIN MACOS VERSIONS -->/{if(!p)print}/<!-- END MACOS VERSIONS -->/{p=0}' README.md > README.tmp
+          awk '
+            /<!-- BEGIN MACOS VERSIONS -->/ {
+              print;
+              print ENVIRON["VERSIONS_LIST"];
+              next;
+            }
+            /<!-- END MACOS VERSIONS -->/ {
+              p=0;
+              print;
+              next;
+            }
+            !p {print}
+          ' README.md > README.tmp
           mv README.tmp README.md
 
       - name: Commit Changes
@@ -43,12 +64,3 @@ jobs:
           git add README.md
           git commit -m "Update macOS versions list" || exit 0
           git push
-
-
-
-  
-
-         
-
-
-
