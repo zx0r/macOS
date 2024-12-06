@@ -1,6 +1,10 @@
 <!-- BEGIN MACOS VERSIONS -->
-# Available macOS Versions
 
+##### 🚀 **_Available macOS Versions_**
+
+<details>
+<summary>🖥️ System Core</summary>
+  
 * Title: macOS Sequoia, Version: 15.1.1, Size: 12428948KiB, Build: 24B2091, Deferred: NO
 * Title: macOS Sequoia, Version: 15.1.1, Size: 14212458KiB, Build: 24B91, Deferred: NO
 * Title: macOS Sequoia, Version: 15.1, Size: 12427940KiB, Build: 24B2083, Deferred: NO
@@ -16,20 +20,21 @@
 * Title: macOS Ventura, Version: 13.6.9, Size: 11920840KiB, Build: 22G830, Deferred: NO
 * Title: macOS Ventura, Version: 13.6.6, Size: 11917983KiB, Build: 22G630, Deferred: NO
 * Title: macOS Monterey, Version: 12.7.4, Size: 12117810KiB, Build: 21H1123, Deferred: NO
+</details>
 
-# macOS Downloader
+###### macOS Downloader
 
 Download any macOS Release without needing a Mac! Download in DMG, ISO, or ZIP File Format.
 
-## Warning ⚠️
+###### Warning ⚠️
 
 **Some Beta Versions may not work because Apple has deprecated `seedutil`. However, stable versions will work normally like before.**
 
-## Notice ⚠️
+###### Notice ⚠️
 
 **As a precaution, we request you to not fork this repository to prevent the violation of GitHub's Terms of Service. As an alternative, follow the new steps as stated below:**
 
-## Steps to Start
+###### Steps to Start
 
 - Click the `Use This Template` button above the commit status.
 - Click on `Create a new repository`.
@@ -40,7 +45,7 @@ Download any macOS Release without needing a Mac! Download in DMG, ISO, or ZIP F
 - Select `Generate macOS Installer`
 - Click on **Run workflow**. Select the desired options and click on **Run workflow**.
 
-## Older macOS Installers
+###### Older macOS Installers
 
 macOS Installers older than High Sierra can be downloaded through the links below:
 
@@ -52,7 +57,7 @@ macOS Installers older than High Sierra can be downloaded through the links belo
 
 In case any of the links don't work, try going [here](https://support.apple.com/en-in/102662#browser) and download them using a Safari browser.
 
-## Known Issues
+###### Known Issues
 
 - Sometimes you may get an error saying `Update Not Found`. The workaround is nothing but to try again.
 - Sometimes you may get an error saying `hdiutil: couldn't eject "disk2" - Resource busy`. Workaround is nothing but to try again
