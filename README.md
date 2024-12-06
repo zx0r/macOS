@@ -1,14 +1,9 @@
 <!-- BEGIN MACOS VERSIONS -->
-
-##### 🚀 **_Available macOS Versions_**
-
 <details>
-<summary>🖥️ System Core</summary>
+<summary>🖥️ Available macOS Versions</summary>
   
-* Title: macOS Sequoia, Version: 15.1.1, Size: 12428948KiB, Build: 24B2091, Deferred: NO
-* Title: macOS Sequoia, Version: 15.1.1, Size: 14212458KiB, Build: 24B91, Deferred: NO
-* Title: macOS Sequoia, Version: 15.1, Size: 12427940KiB, Build: 24B2083, Deferred: NO
-* Title: macOS Sequoia, Version: 15.1, Size: 14209591KiB, Build: 24B83, Deferred: NO
+* macOS Sequoia, Version: 15.1.1, Size: 12428948KiB, Build: 24B2091
+* macOS Sequoia, Version: 15.1, Size: 12427940KiB, Build: 24B2083
 * Title: macOS Sequoia, Version: 15.0.1, Size: 14138482KiB, Build: 24A348, Deferred: NO
 * Title: macOS Sequoia, Version: 15.0, Size: 14138558KiB, Build: 24A335, Deferred: NO
 * Title: macOS Sonoma, Version: 14.7.1, Size: 13339062KiB, Build: 23H222, Deferred: NO
