@@ -1,14 +1,8 @@
-# Update README.md with macOS Versions Automatically
-
-## Step 1: Create Version Table Template
-Add this marker in your README.md:
-```markdown
+##### MACOS VERSIONS
 <!-- BEGIN MACOS VERSIONS -->
 | macOS Version | Build Number | Release Date |
 |--------------|--------------|--------------|
 <!-- END MACOS VERSIONS -->
-
-
 
 # macOS Downloader
 
