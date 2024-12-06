@@ -1,10 +1,9 @@
 name: List Available macOS Releases
-
 on:
   workflow_dispatch:
   schedule:
     - cron: "0 0 * * 2"
-
+    
 jobs:
   update-versions:
     runs-on: macos-latest
@@ -13,29 +12,40 @@ jobs:
       
       - name: Get macOS Versions
         run: |
-          # Create versions list with formatted sizes
-          echo "VERSIONS<<EOF" >> $GITHUB_ENV
-          echo "<details>" >> $GITHUB_ENV
-          echo "<summary>🖥️ Available macOS Versions</summary>" >> $GITHUB_ENV
-          echo "" >> $GITHUB_ENV
-          softwareupdate --list-full-installers | grep -E "macOS.*" | while read -r line; do
-            size_kb=$(echo "$line" | grep -o 'Size: [0-9]*' | awk '{print $2}')
-            size_gb=$(echo "scale=2; $size_kb/1024/1024" | bc)
-            formatted_line=$(echo "$line" | sed 's/, Size: [0-9]*KiB//')
-            echo "* $formatted_line (${size_gb}GB)" >> $GITHUB_ENV
-          done
-          echo "" >> $GITHUB_ENV
-          echo "</details>" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          # Create formatted versions list
+          {
+            echo "<details>"
+            echo "<summary>🖥️ Available macOS Versions</summary>"
+            echo ""
+            softwareupdate --list-full-installers | grep -E "macOS.*" | while read -r line; do
+              name=$(echo "$line" | grep -o 'Title: macOS [^,]*' | cut -d' ' -f3)
+              version=$(echo "$line" | grep -o 'Version: [^,]*' | cut -d' ' -f2)
+              build=$(echo "$line" | grep -o 'Build: [^,]*' | cut -d' ' -f2)
+              size_kb=$(echo "$line" | grep -o 'Size: [0-9]*' | cut -d' ' -f2)
+              size_gb=$(echo "scale=2; $size_kb/1024/1024" | bc)
+              echo "* macOS $name $version ($build) - ${size_gb}GB"
+            done
+            echo ""
+            echo "</details>"
+          } > versions.txt
 
       - name: Update README
         run: |
-          # Create new README with updated content
-          cat > README.tmp << EOL
-          $(cat README.md | sed -n '1,/<!-- BEGIN MACOS VERSIONS -->/p')
-          ${{ env.VERSIONS }}
-          $(cat README.md | sed -n '/<!-- END MACOS VERSIONS -->/,$p')
-          EOL
-          mv README.tmp README.md
+          # Combine files with markers
+          awk '
+            /<!-- BEGIN MACOS VERSIONS -->/ {
+              print
+              system("cat versions.txt")
+              skip=1
+              next
+            }
+            /<!-- END MACOS VERSIONS -->/ {
+              skip=0
+            }
+            !skip {
+              print
+            }
+          ' README.md > README.new
+          mv README.new README.md
 
 
