@@ -1,7 +1,4 @@
-##### MACOS VERSIONS
 <!-- BEGIN MACOS VERSIONS -->
-| macOS Version | Build Number | Release Date |
-|--------------|--------------|--------------|
 <!-- END MACOS VERSIONS -->
 
 # macOS Downloader
