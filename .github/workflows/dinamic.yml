@@ -1,0 +1,42 @@
+name: Generate macOS Installer
+
+on:
+  workflow_dispatch:
+    inputs:
+      file:
+        type: choice
+        description: "File Type"
+        required: true
+        options:
+          - ISO
+          - DMG
+          - ZIP
+
+jobs:
+  get-versions:
+    runs-on: macos-latest
+    outputs:
+      versions: ${{ steps.set-versions.outputs.versions }}
+    steps:
+      - name: Get Available Versions
+        id: set-versions
+        run: |
+          VERSIONS=$(softwareupdate --list-full-installers | grep -E "macOS.*" | awk '{print $2" v"$3}' | jq -R -s -c 'split("\n")[:-1]')
+          echo "versions=$VERSIONS" >> $GITHUB_OUTPUT
+
+  build:
+    needs: get-versions
+    runs-on: macos-latest
+    if: github.repository == 'zx0r/macOS'
+    strategy:
+      matrix:
+        macos_version: ${{fromJson(needs.get-versions.outputs.versions)}}
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Extract Version Details
+        id: extract-details
+        run: |
+          string="${{ matrix.macos_version }}"
+          echo "installer_version=${string//*v/}" >> $GITHUB_ENV
+          echo "installer_name=${string// v*/}" >> $GITHUB_ENV
