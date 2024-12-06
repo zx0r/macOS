@@ -10,15 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Initialize README
-        run: |
-          if [ ! -f README.md ]; then
-            echo "# macOS Versions" > README.md
-            echo "" >> README.md
-            echo "<!-- BEGIN MACOS VERSIONS -->" >> README.md
-            echo "<!-- END MACOS VERSIONS -->" >> README.md
-          fi
-
       - name: Get macOS Versions
         id: versions
         run: |
