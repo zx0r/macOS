@@ -15,7 +15,6 @@
 * macOS Monterey 12.7.4 (21H1123) - 11.55GB
 
 </details>
-<details>
   
 ##### macOS Downloader
 
