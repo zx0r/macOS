@@ -11,9 +11,6 @@ on:
           - Sequoia v15.3
           - Sonoma v14.7.2
           - Ventura v13.7.1
-          - Monterey v12.7.6
-          - Big Sur v11.7.10
-          - Catalina v10.15.7
       file:
         type: choice
         description: "File Type"
