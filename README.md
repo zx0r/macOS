@@ -19,4 +19,4 @@ Download **any macOS release** (DMG/ISO/ZIP) without a Mac!
 3. Go to Actions → "Generate macOS Installer" → Run workflow  
 ```
 <!-- BEGIN MACOS VERSIONS -->
-
+<!-- END MACOS VERSIONS -->
