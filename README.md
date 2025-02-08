@@ -20,7 +20,7 @@ Download **any macOS release** (DMG/ISO/ZIP) without a Mac!
 ```
 <!-- BEGIN MACOS VERSIONS -->
 <details>
-<summary>🖥️ macOS Versions</summary>
+🖥️ macOS Versions
 * macOS Sequoia 15.2 (24C101) - 14.22GB
 * macOS Sequoia 15.1.1 (24B2091) - 11.85GB
 * macOS Sequoia 15.1.1 (24B91) - 13.55GB
