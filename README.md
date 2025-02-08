@@ -17,7 +17,7 @@ Download **any macOS release** (DMG/ISO/ZIP) without a Mac!
 2. Edit workflow URL in `.github/workflows/generate-installer.yml`:  
    - Replace `https://github.com/Comp-Labs/Download-macOS` → **your repo URL**  
 3. Go to Actions → "Generate macOS Installer" → Run workflow  
-
+```
 <!-- BEGIN MACOS VERSIONS -->
 <details>
 <summary>🖥️ macOS Versions</summary>
