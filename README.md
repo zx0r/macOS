@@ -70,6 +70,22 @@ Download **any macOS release** (DMG/ISO/ZIP) without a Mac!
 <details>
 <summary>🖥️ macOS Versions</summary>
 
+* macOS Sequoia 15.3.2 (24D81) - 14.20GB
+* macOS Sequoia 15.3.1 (24D70) - 14.20GB
+* macOS Sequoia 15.3 (24D60) - 14.19GB
+* macOS Sequoia 15.2 (24C101) - 14.22GB
+* macOS Sonoma 14.7.4 (23H420) - 12.71GB
+* macOS Sonoma 14.7.3 (23H417) - 12.71GB
+* macOS Sonoma 14.7.2 (23H311) - 12.71GB
+* macOS Ventura 13.7.4 (22H420) - 11.36GB
+* macOS Ventura 13.7.3 (22H417) - 11.36GB
+* macOS Ventura 13.7.2 (22H313) - 11.36GB
+* macOS Monterey 12.7.4 (21H1123) - 11.55GB
+
+</details>
+<details>
+<summary>🖥️ macOS Versions</summary>
+
 * macOS Sequoia 15.3.1 (24D70) - 14.20GB
 * macOS Sequoia 15.3 (24D60) - 14.19GB
 * macOS Sequoia 15.2 (24C101) - 14.22GB
